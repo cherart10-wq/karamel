@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карамель — кондитерские изделия</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="style.css?v=99">
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="logo">
+            <img src="images/logo.jpg" alt="Лого" class="logo-img" onerror="this.style.display='none'">
+            <span>Карамель</span>
+        </div>
+        <nav class="nav">
+            <!-- Вызываем функцию прямо в onclick -->
+            <a href="javascript:void(0)" onclick="scrollToSection('catalog')">Каталог</a>
+            <a href="javascript:void(0)" onclick="scrollToSection('about')">О нас</a>
+            <a href="javascript:void(0)" onclick="scrollToSection('contacts')">Контакты</a>
+            <a href="#" class="cart-link">🛒 Корзина (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+    <!-- Баннер -->
+    <section class="hero">
+        <h1>Свежая выпечка каждый день</h1>
+        <p>Торты, пирожные и печенье ручной работы</p>
+        <a href="javascript:void(0)" class="btn" onclick="scrollToSection('catalog')">Смотреть каталог</a>
+    </section>
+
+    <!-- Каталог -->
+    <section id="catalog" class="catalog">
+        <h2>Наши изделия</h2>
+
+        <div class="filters-panel">
+            <input type="text" id="search-input" class="search-input" placeholder="🔍 Поиск по названию...">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">Все</button>
+                <button class="filter-btn" data-category="cake">Торты</button>
+                <button class="filter-btn" data-category="pastry">Пирожные</button>
+                <button class="filter-btn" data-category="cookie">Печенье</button>
+            </div>
+        </div>
+
+        <div class="products">
+            <div class="product-card" data-category="cake">
+                <img src="images/cake1.jpg" alt="Торт «Медовик»" class="product-img" onerror="this.style.display='none'">
+                <h3>Торт «Медовик»</h3>
+                <p class="product-desc">Классический медовый торт с нежным кремом</p>
+                <p class="product-price">450 ₽</p>
+                <button class="btn add-to-cart" data-name="Торт «Медовик»" data-price="450">В корзину</button>
+            </div>
+
+            <div class="product-card" data-category="pastry">
+                <img src="images/cake2.jpg" alt="Пирожное «Эклер»" class="product-img" onerror="this.style.display='none'">
+                <h3>Пирожное «Эклер»</h3>
+                <p class="product-desc">Заварное тесто с ванильным кремом</p>
+                <p class="product-price">150 ₽</p>
+                <button class="btn add-to-cart" data-name="Пирожное «Эклер»" data-price="150">В корзину</button>
+            </div>
+
+            <div class="product-card" data-category="cookie">
+                <img src="images/cake3.jpg" alt="Печенье овсяное" class="product-img" onerror="this.style.display='none'">
+                <h3>Печенье овсяное</h3>
+                <p class="product-desc">Хрустящее, с изюмом и корицей (500 г)</p>
+                <p class="product-price">300 ₽</p>
+                <button class="btn add-to-cart" data-name="Печенье овсяное" data-price="300">В корзину</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section id="about" class="about">
+        <h2>О нас</h2>
+        <p>Мы печём с любовью из натуральных ингредиентов. Заказы принимаем по телефону.</p>
+    </section>
+
+    <!-- Контакты -->
+    <footer id="contacts" class="footer">
+        <p>📞 +7 (999) 123-45-67</p>
+        <p>📍 г. Кострома, ул. Сладкая, д. 1</p>
+        <p>© 2026 Карамель</p>
+    </footer>
+
+    <!-- Затемнение фона -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Панель корзины -->
+    <aside class="cart-panel" id="cart-panel">
+        <div class="cart-header">
+            <h2>Ваша корзина</h2>
+            <button class="close-cart" id="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="empty-cart-msg">Корзина пока пуста 🍰</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                Итого: <span id="cart-total-price">0</span> ₽
+            </div>
+            <button class="btn checkout-btn" id="checkout-btn">Оформить заказ</button>
+        </div>
+    </aside>
+
+    <!-- Контейнер для всплывающих уведомлений -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Модальное окно оформления заказа -->
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-content">
+            <button class="close-modal" id="close-modal">&times;</button>
+            <h2>Оформление заказа</h2>
+            <p class="checkout-total">К оплате: <strong id="modal-total-price">0</strong> ₽</p>
+            <form id="order-form" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Ваше имя *</label>
+                    <input type="text" id="name" required placeholder="Иван">
+                </div>
+                <div class="form-group">
+                    <label>Телефон *</label>
+                    <input type="tel" id="phone" required placeholder="+7 (999) 123-45-67">
+                </div>
+                <div class="form-group">
+                    <label>Адрес доставки *</label>
+                    <input type="text" id="address" required placeholder="ул. Сладкая, д. 1, кв. 2">
+                </div>
+                <div class="form-group">
+                    <label>Комментарий к заказу</label>
+                    <textarea id="comment" rows="3" placeholder="Например: перезвонить за час до доставки"></textarea>
+                </div>
+                <button type="button" class="btn submit-order-btn">Подтвердить заказ</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app2.js"></script>
+
+    <!-- Самая надежная функция прокрутки -->
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                // Находим реальный контейнер прокрутки (на случай, если Tuqo/Layero обернули всё в свой div)
+                let scrollContainer = element.parentElement;
+                while (scrollContainer) {
+                    if (scrollContainer.scrollHeight > scrollContainer.clientHeight && 
+                       (window.getComputedStyle(scrollContainer).overflowY === 'auto' || window.getComputedStyle(scrollContainer).overflowY === 'scroll')) {
+                        break;
+                    }
+                    scrollContainer = scrollContainer.parentElement;
+                }
+
+                // Если контейнер найден, прокручиваем его, иначе прокручиваем всё окно
+                if (scrollContainer && scrollContainer !== document.body) {
+                    const header = document.querySelector('.header');
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const offset = element.offsetTop - headerHeight;
+                    
+                    scrollContainer.scrollTo({ top: offset, behavior: 'smooth' });
+                } else {
+                    const header = document.querySelector('.header');
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const offset = element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
