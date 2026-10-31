@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карамель — кондитерские изделия</title>
-    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="style.css?v=99">
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- Шапка сайта -->
-    <header class="header">
+    <header class="header" id="header">
         <div class="logo">
-            <img src="images/logo.jpg" alt="Лого" class="logo-img" onerror="this.style.display='none'">
+            <img src="logo.jpg" alt="Лого" class="logo-img" onerror="this.style.display='none'">
             <span>Карамель</span>
         </div>
         <nav class="nav">
-            <!-- Вызываем функцию прямо в onclick -->
+            <!-- Вызываем функцию прокрутки напрямую -->
             <a href="javascript:void(0)" onclick="scrollToSection('catalog')">Каталог</a>
             <a href="javascript:void(0)" onclick="scrollToSection('about')">О нас</a>
             <a href="javascript:void(0)" onclick="scrollToSection('contacts')">Контакты</a>
@@ -136,42 +136,26 @@
         </div>
     </div>
 
+    <!-- Основной скрипт (корзина, заказы) -->
     <script src="app2.js"></script>
 
-    <!-- Самая надежная функция прокрутки -->
-            // Ждем, пока страница полностью загрузится
-        document.addEventListener('DOMContentLoaded', function() {
-            // Находим все ссылки в меню и кнопку на баннере
-            const links = document.querySelectorAll('.nav a, .hero .btn');
-            
-            links.forEach(link => {
-                // Берем ID секции из атрибута href (например, из "#catalog" берем "catalog")
-                const targetId = link.getAttribute('href');
+    <!-- Встроенный скрипт плавной прокрутки -->
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const header = document.getElementById('header');
+                const headerHeight = header ? header.offsetHeight : 0;
                 
-                // Если это ссылка с решеткой (не корзина)
-                if (targetId && targetId.startsWith('#') && targetId !== '#') {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault(); // Отменяем стандартный переход
-                        
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            // Вычисляем высоту шапки, чтобы она не перекрывала заголовок
-                            const header = document.querySelector('.header');
-                            const headerHeight = header ? header.offsetHeight : 0;
-                            
-                            // Находим позицию элемента на странице
-                            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                            const offsetPosition = elementPosition - headerHeight;
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                const offsetPosition = elementPosition - headerHeight;
 
-                            // Плавно прокручиваем с помощью встроенного API браузера
-                            window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth'
-                            });
-                        }
-                    });
-                }
-            });
-        });
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    </script>
 </body>
 </html>
