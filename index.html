@@ -139,36 +139,39 @@
     <script src="app2.js"></script>
 
     <!-- Самая надежная функция прокрутки -->
-    <script>
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                // Находим реальный контейнер прокрутки (на случай, если Tuqo/Layero обернули всё в свой div)
-                let scrollContainer = element.parentElement;
-                while (scrollContainer) {
-                    if (scrollContainer.scrollHeight > scrollContainer.clientHeight && 
-                       (window.getComputedStyle(scrollContainer).overflowY === 'auto' || window.getComputedStyle(scrollContainer).overflowY === 'scroll')) {
-                        break;
-                    }
-                    scrollContainer = scrollContainer.parentElement;
-                }
+            // Ждем, пока страница полностью загрузится
+        document.addEventListener('DOMContentLoaded', function() {
+            // Находим все ссылки в меню и кнопку на баннере
+            const links = document.querySelectorAll('.nav a, .hero .btn');
+            
+            links.forEach(link => {
+                // Берем ID секции из атрибута href (например, из "#catalog" берем "catalog")
+                const targetId = link.getAttribute('href');
+                
+                // Если это ссылка с решеткой (не корзина)
+                if (targetId && targetId.startsWith('#') && targetId !== '#') {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault(); // Отменяем стандартный переход
+                        
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            // Вычисляем высоту шапки, чтобы она не перекрывала заголовок
+                            const header = document.querySelector('.header');
+                            const headerHeight = header ? header.offsetHeight : 0;
+                            
+                            // Находим позицию элемента на странице
+                            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                            const offsetPosition = elementPosition - headerHeight;
 
-                // Если контейнер найден, прокручиваем его, иначе прокручиваем всё окно
-                if (scrollContainer && scrollContainer !== document.body) {
-                    const header = document.querySelector('.header');
-                    const headerHeight = header ? header.offsetHeight : 0;
-                    const offset = element.offsetTop - headerHeight;
-                    
-                    scrollContainer.scrollTo({ top: offset, behavior: 'smooth' });
-                } else {
-                    const header = document.querySelector('.header');
-                    const headerHeight = header ? header.offsetHeight : 0;
-                    const offset = element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                    
-                    window.scrollTo({ top: offset, behavior: 'smooth' });
+                            // Плавно прокручиваем с помощью встроенного API браузера
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
                 }
-            }
-        }
-    </script>
+            });
+        });
 </body>
 </html>
